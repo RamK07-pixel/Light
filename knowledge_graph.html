@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 100vh;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#5f2538", "description": "\"Electromagnetism, Transformers\"\u003cSEP\u003e\"Energy and Work, Mechanics, Photoelectric Effect\"", "entity_type": "\"TOPIC\"", "id": "\"PHYSICS\"", "label": "\"PHYSICS\"", "shape": "dot", "size": 10, "source_id": "chunk-4f89eec404fa3329efcc62c43e61e52e"}, {"color": "#cd6f2e", "description": "\"Mechanics demonstrates strong principles while Energy work example shows errors.\"", "entity_type": "\"UNKNOWN\"", "id": "\"ENERGY AND WORK, MECHANICS\"", "label": "\"ENERGY AND WORK, MECHANICS\"", "shape": "dot", "size": 10, "source_id": "chunk-4f89eec404fa3329efcc62c43e61e52e"}, {"color": "#ed7603", "description": "\"Thermodynamics is a subject area where he faced challenges, particularly with the concept of entropy.\"", "entity_type": "\"TOPIC\"", "id": "\"THERMODYNAMICS\"", "label": "\"THERMODYNAMICS\"", "shape": "dot", "size": 10, "source_id": "chunk-8e0291bd552d3a18e548f794b4cc7c7d\u003cSEP\u003echunk-42f8e16bf51765cef3e53e757295b80b"}, {"color": "#ca6462", "description": "\"A common misconception is that entropy always decreases, causing errors in analysis of irreversible processes.\"\u003cSEP\u003e\"A common misconception is that entropy always decreases, which leads to errors in analyzing irreversible processes.\"", "entity_type": "\"COMMON MISCONCEPTIONS\"", "id": "\"ENTROPY CHANGES IN ISOLATED SYSTEMS\"", "label": "\"ENTROPY CHANGES IN ISOLATED SYSTEMS\"", "shape": "dot", "size": 10, "source_id": "chunk-8e0291bd552d3a18e548f794b4cc7c7d\u003cSEP\u003echunk-42f8e16bf51765cef3e53e757295b80b"}, {"color": "#d157fb", "description": "\"he is a student attempting JEE Mains questions, showing strengths in kinematics but struggling with thermodynamics.\"", "entity_type": "\"STUDENT\"", "id": "\"HE\"", "label": "\"HE\"", "shape": "dot", "size": 10, "source_id": "chunk-42f8e16bf51765cef3e53e757295b80b"}, {"color": "#db1c6d", "description": "\"Mechanics is a section where she demonstrated strong Newtonian principles but struggled with relative motion.\"", "entity_type": "\"TOPIC\"", "id": "\"MECHANICS\"", "label": "\"MECHANICS\"", "shape": "dot", "size": 10, "source_id": "chunk-6daf996f812e13fe44f0c15f72ffbfa4"}, {"color": "#0fe026", "description": "\"she is a student attempting JEE Mains questions, showing strengths in mechanics but struggling with relative motion.\"", "entity_type": "\"STUDENT\"", "id": "\"SHE\"", "label": "\"SHE\"", "shape": "dot", "size": 10, "source_id": "chunk-d7aeca66cac2e5f3f046fa67a562dbda"}, {"color": "#2dfb7a", "description": "\"RAM is a student performing well in physics, with some common misconceptions regarding kinematics and mechanics topics.\"", "entity_type": "\"STUDENT\"", "id": "\"RAM\"", "label": "\"RAM\"", "shape": "dot", "size": 10, "source_id": "chunk-54932f25cf1d6d047c93d89bf4a9332c"}, {"color": "#63c543", "description": "\"he is a student attempting JEE Mains questions, showing strengths in kinematics but struggling with thermodynamics.\"", "entity_type": "\"HE\"/\"SHE\"", "id": "\"STUDENT\"", "label": "\"STUDENT\"", "shape": "dot", "size": 10, "source_id": "chunk-54932f25cf1d6d047c93d89bf4a9332c"}, {"color": "#d7ab8f", "description": "\"student selection of answers\", \"student option to choose between correct and incorrect options\"", "entity_type": "\"OPTION2\"", "id": "\"STUDENT OPTION\"", "label": "\"STUDENT OPTION\"", "shape": "dot", "size": 10, "source_id": "chunk-27a4fd96df81dff4d365704a1a5eb618"}, {"color": "#50621b", "description": "\"Entropy in isolated systems always increases for irreversible processes, clearing up the misconception.\"", "entity_type": "\"EXPLANATION\"", "id": "\"ENTROPY AND IRREVERSIBLE PROCESSES\"", "label": "\"ENTROPY AND IRREVERSIBLE PROCESSES\"", "shape": "dot", "size": 10, "source_id": "chunk-8e0291bd552d3a18e548f794b4cc7c7d\u003cSEP\u003echunk-42f8e16bf51765cef3e53e757295b80b"}, {"color": "#25ec9d", "description": "\"She struggled with incorrect application of frames of reference when analyzing relative motion.\"", "entity_type": "\"COMMON MISCONCEPTIONS\"", "id": "\"OPTION\"", "label": "\"OPTION\"", "shape": "dot", "size": 10, "source_id": "chunk-2007f51e1fa913b47e92f2a9ba06e803"}, {"color": "#b6b8ff", "description": "\"A common misconception is the incorrect application of frames of reference in relative motion.\"\u003cSEP\u003e\"Relative motion and its significance in physics.\"", "entity_type": "\"COMMON MISCONCEPTIONS\"", "id": "\"RELATIVE MOTION\"", "label": "\"RELATIVE MOTION\"", "shape": "dot", "size": 10, "source_id": "chunk-85ed5413ff37281f441b408c753c682e\u003cSEP\u003echunk-6daf996f812e13fe44f0c15f72ffbfa4"}, {"color": "#49adb7", "description": "\"Consistent reference frames are crucial for analyzing motion correctly.\"", "entity_type": "\"EXPLANATION\"", "id": "\"FRAMES OF REFERENCE IN RELATIVE MOTION\"", "label": "\"FRAMES OF REFERENCE IN RELATIVE MOTION\"", "shape": "dot", "size": 10, "source_id": "chunk-6daf996f812e13fe44f0c15f72ffbfa4"}, {"color": "#383838", "description": "\"the center coordinates of the circle are (h, k", "entity_type": "\"CENTER\"", "id": "\"H\"", "label": "\"H\"", "shape": "dot", "size": 10, "source_id": "chunk-a8287aa80ed6c9a575c7fc9561bfbe04"}, {"color": "#b3724f", "description": "\"the center coordinates of the circle are (h, k", "entity_type": "\"CENTER\"", "id": "\"K\"", "label": "\"K\"", "shape": "dot", "size": 10, "source_id": "chunk-a8287aa80ed6c9a575c7fc9561bfbe04"}]);
+                  edges = new vis.DataSet([{"description": "\"Mechanics demonstrates strong principles while Energy work example shows errors.\"", "from": "\"PHYSICS\"", "keywords": "\"Performance variation, concept struggle\"", "source_id": "chunk-4f89eec404fa3329efcc62c43e61e52e", "to": "\"ENERGY AND WORK, MECHANICS\"", "width": 7.0}, {"description": "\"Thermodynamics includes the misconception about entropy always decreasing.\"", "from": "\"THERMODYNAMICS\"", "keywords": "\"misconception linkage, conceptual clarity\"", "source_id": "chunk-8e0291bd552d3a18e548f794b4cc7c7d", "to": "\"ENTROPY CHANGES IN ISOLATED SYSTEMS\"", "width": 8.0}, {"description": "\"he struggled with thermodynamics, particularly entropy-related concepts.\"", "from": "\"THERMODYNAMICS\"", "keywords": "\"topic difficulty, performance analysis\"", "source_id": "chunk-42f8e16bf51765cef3e53e757295b80b", "to": "\"HE\"", "width": 7.0}, {"description": "\"she excelled in mechanics but made errors in relative motion, particularly in using reference frames.\"", "from": "\"MECHANICS\"", "keywords": "\"performance variation, concept struggle\"", "source_id": "chunk-6daf996f812e13fe44f0c15f72ffbfa4", "to": "\"SHE\"", "width": 8.0}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
